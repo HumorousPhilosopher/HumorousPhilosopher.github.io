@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title></title>
+  
+  
+  <link href="https://www.mattjia.cn/atom.xml" rel="self"/>
+  
+  <link href="https://www.mattjia.cn/"/>
+  <updated>2021-03-11T13:11:17.789Z</updated>
+  <id>https://www.mattjia.cn/</id>
+  
+  <author>
+    <name>Matt Jia</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CentOS安装mysql5.7.31 (压缩包方式)</title>
+    <link href="https://www.mattjia.cn/2021/03/11/CentOS%E5%AE%89%E8%A3%85mysql5-7-31-%E5%8E%8B%E7%BC%A9%E5%8C%85%E6%96%B9%E5%BC%8F/"/>
+    <id>https://www.mattjia.cn/2021/03/11/CentOS%E5%AE%89%E8%A3%85mysql5-7-31-%E5%8E%8B%E7%BC%A9%E5%8C%85%E6%96%B9%E5%BC%8F/</id>
+    <published>2021-03-11T13:04:00.000Z</published>
+    <updated>2021-03-11T13:11:17.789Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>不需要用docker安装mysql的可以采用压缩包方式安装</p></blockquote><h2 id="下载mysql安装包"><a href="#下载mysql安装包" class="headerlink" title="下载mysql安装包"></a>下载mysql安装包</h2><blockquote><p><a href="https://downloads.mysql.com/archives/community/">Mysql官网下载地址</a></p></blockquote><p><img src="https://img-blog.csdnimg.cn/20210225144611111.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3NDcwNTUy,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p><pre><code>我们选择5.7.31版本下载完成之后，上传到linux的usr/local/下</code></pre><h2 id="将mysql压缩包解压重命名"><a href="#将mysql压缩包解压重命名" class="headerlink" title="将mysql压缩包解压重命名"></a>将mysql压缩包解压重命名</h2><pre><code>#解压tar -zxvf mysql-5.7.31-linux-glibc2.12-x86_64.tar.gz#重命名mv mysql-5.7.31-linux-glibc2.12-x86_64  mysql</code></pre><h2 id="在数据磁盘创建数据文件夹"><a href="#在数据磁盘创建数据文件夹" class="headerlink" title="在数据磁盘创建数据文件夹"></a>在数据磁盘创建数据文件夹</h2><pre><code>mikdir /data/mysql/data</code></pre><h2 id="创建mysql用户和用户组"><a href="#创建mysql用户和用户组" class="headerlink" title="创建mysql用户和用户组"></a>创建mysql用户和用户组</h2><pre><code>groupadd mysql#useradd -r参数表示mysql用户是系统用户,不可用于登录系统useradd -r -s /sbin/nologin -g mysql mysql -d /usr/local/mysql/</code></pre><h2 id="改变mysql目录权限-之前是root权限，现在设置成mysql权限"><a href="#改变mysql目录权限-之前是root权限，现在设置成mysql权限" class="headerlink" title="改变mysql目录权限,之前是root权限，现在设置成mysql权限"></a>改变mysql目录权限,之前是root权限，现在设置成mysql权限</h2><pre><code>chown -R mysql:mysql /usr/local/mysql/</code></pre><h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><pre><code>cd /usr/local/mysql/bin./mysql_install_db --user=mysql --basedir=/usr/local/mysql/ --datadir=/usr/local/mysql/data/</code></pre><h2 id="把mysql放到本地系统服务中"><a href="#把mysql放到本地系统服务中" class="headerlink" title="把mysql放到本地系统服务中"></a>把mysql放到本地系统服务中</h2><pre><code>cp -a support-files/mysql.server /etc/init.d/mysqld</code></pre><h2 id="由于mysql内没有my-default-cnf-文件-直接编辑的-etc-my-cnf文件-也可上传my-default-cnf"><a href="#由于mysql内没有my-default-cnf-文件-直接编辑的-etc-my-cnf文件-也可上传my-default-cnf" class="headerlink" title="由于mysql内没有my-default.cnf 文件,直接编辑的 /etc/my.cnf文件(也可上传my-default.cnf)"></a>由于mysql内没有my-default.cnf 文件,直接编辑的 /etc/my.cnf文件(也可上传my-default.cnf)</h2><pre><code>vi my.cnf</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">#mysql目录</span><br><span class="line">basedir&#x3D;&#x2F;usr&#x2F;local&#x2F;mysql</span><br><span class="line">#数据目录</span><br><span class="line">datadir&#x3D;&#x2F;data&#x2F;mysql&#x2F;data</span><br><span class="line"></span><br><span class="line">socket&#x3D;&#x2F;tmp&#x2F;mysql.sock</span><br><span class="line"></span><br><span class="line">user&#x3D;mysql</span><br><span class="line">#端口号</span><br><span class="line">port&#x3D;3306</span><br><span class="line">#字符编码集</span><br><span class="line">character-set-server &#x3D; utf8mb4</span><br><span class="line">collation-server &#x3D; utf8mb4_unicode_ci</span><br><span class="line">init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;</span><br><span class="line"></span><br><span class="line">symbolic-links&#x3D;0</span><br><span class="line">#最大连接数</span><br><span class="line">max_connections&#x3D;200</span><br><span class="line">#引擎</span><br><span class="line">default-storage-engine&#x3D;INNODB</span><br><span class="line">#忽略大小写</span><br><span class="line">lower_case_table_names&#x3D;1</span><br><span class="line"></span><br><span class="line">max_allowed_packet&#x3D;32M</span><br><span class="line"></span><br><span class="line">explicit_defaults_for_timestamp&#x3D;true</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line"></span><br><span class="line">log-error&#x3D;&#x2F;var&#x2F;log&#x2F;mysql&#x2F;mysql.log</span><br><span class="line"></span><br><span class="line">pid-file&#x3D;&#x2F;var&#x2F;run&#x2F;mysql&#x2F;mysql.pid</span><br></pre></td></tr></table></figure><pre><code>注意:mysql连接localhost通常通过一个Unix域套接字文件进行一般是/tmp/mysql.sock这个socket路径不要修改不然连本地mysql的时候回报错:ERROR 2002 (HY000): Can&#39;t connect to local MySQL server through socket &#39;/tmp/mysql.sock&#39;因为my.cnf中配置了log-error、pid-file路径，因此需要在/var/log/、/var/run/创建mysql目录，并且给mysql用户全部的权限(chmod)chmod -R 777 /var/log/mysql/chmod -R 777 /var/run/mysql/</code></pre><h2 id="启动mysql服务"><a href="#启动mysql服务" class="headerlink" title="启动mysql服务"></a>启动mysql服务</h2><pre><code>service mysqld start</code></pre><h2 id="查看初始密码，尝试登陆mysql"><a href="#查看初始密码，尝试登陆mysql" class="headerlink" title="查看初始密码，尝试登陆mysql"></a>查看初始密码，尝试登陆mysql</h2><pre><code>cat /root/.mysql_secret</code></pre><h2 id="登录成功修改密码"><a href="#登录成功修改密码" class="headerlink" title="登录成功修改密码"></a>登录成功修改密码</h2><pre><code>SET PASSWORD FOR &#39;root&#39;@localhost=PASSWORD(&#39;123456&#39;);</code></pre><h2 id="配置mysql环境变量-修改-etc-profile文件-在最下方添加配置-加入开机自启"><a href="#配置mysql环境变量-修改-etc-profile文件-在最下方添加配置-加入开机自启" class="headerlink" title="配置mysql环境变量,修改/etc/profile文件,在最下方添加配置,加入开机自启"></a>配置mysql环境变量,修改/etc/profile文件,在最下方添加配置,加入开机自启</h2><pre><code>vi /etc/profile#增加如下配置：export PATH=$PATH:/usr/local/mysql/bin#立即生效source /etc/profile</code></pre><h2 id="开机自启配置"><a href="#开机自启配置" class="headerlink" title="开机自启配置"></a>开机自启配置</h2><pre><code>chmod +x /etc/init.d/mysqldchkconfig --add mysqldchkconfig --list#如果看到mysql的服务，并且3,4,5都是on的话则成功，如果是off，则键入chkconfig --level 345 mysqld on#然后重启电脑reboot#查看mysql运行状态service mysqld status</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;不需要用docker安装mysql的可以采用压缩包方式安装&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;下载mysql安装包&quot;&gt;&lt;a href=&quot;#下载mysql安装包&quot; class=&quot;headerlink&quot; title=&quot;下载mysql安</summary>
+      
+    
+    
+    
+    <category term="Linux" scheme="https://www.mattjia.cn/categories/Linux/"/>
+    
+    
+    <category term="docker" scheme="https://www.mattjia.cn/tags/docker/"/>
+    
+    <category term="mysql" scheme="https://www.mattjia.cn/tags/mysql/"/>
+    
+  </entry>
+  
+</feed>
